@@ -31,6 +31,6 @@ public class DifficultyButton : MonoBehaviour
     {
         //Debug.Log(gameObject.name + " was clicked");
         audioManager.PlaySFX(audioManager.buttonClick); // Play button click SFX - Points to PlaySFX() in AudioManager.cs
-        gameManager.StartGame(difficulty); // Points to startGame() inside GameManager.cs
+        gameManager.StartGame(difficulty); // Points to StartGame() inside GameManager.cs
     }
 }

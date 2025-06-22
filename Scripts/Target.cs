@@ -40,6 +40,7 @@ public class Target : MonoBehaviour
 
     // This code is to only destroy the item when it is hit within the hitbox for as long as the game is active
     // If I just added the GetMouseButton() to destroy it, it would've just destroyed it when I am clicking on the background
+    // I needed to do all this because OnMouseDown() is broken for me :(
     private void Update()
     {
         if (gameManager.isGameActive)
@@ -48,13 +49,13 @@ public class Target : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 // So apparently raycasts are a thing, and this creates a ray from wherever the camera is facing to the mouse position
+                // Check if the raycast hit the item (within hitbox of target), then destroy
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
                 // Perform the raycast
                 if (Physics.Raycast(ray, out hit))
                 {
-                    // Check if the raycast hit the item (within hitbox of target), then destroy
                     // The UpdateScore() function is within GameManager.cs and referenced here
                     // When you successfuly hit a target, it adds the point value of the item to the score and plays a sound effect
                     // Targets explode with their own uniquely-coloured explosion effect

@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    // Variables are all binded to their specific elements within the Unity interface, applies to all scripts for this game
     public bool isGameActive;
     public Button restartButton;
     public GameObject titlescreen; // Title screen contains the title text and difficulty buttons
@@ -70,13 +71,13 @@ public class GameManager : MonoBehaviour
     // Do note: The onClick() method for the restart button points to RestartGame() and is configured via the Unity Engine interface, not directly in this code
     public void RestartGame() { SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
 
-    // Quits the application, onClick() of restart button is binded to this function within the Unity Engine interface
+    // Quits the application, onClick() of quit button is binded to this function within the Unity Engine interface
     public void Quit() { Application.Quit(); }
 
     // Launches items for as long as the game is active
     IEnumerator SpawnTarget()
     {
-        // Waits 1 second between each spawn of an object
+        // Waits the appropriate amount of time (in seconds) according to the difficulty
         while (isGameActive)
         {
             yield return new WaitForSeconds(spawnRate);
