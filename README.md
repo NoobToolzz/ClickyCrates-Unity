@@ -31,6 +31,13 @@ The game uses easy words and clear pictures. The graphics are bright, colorful, 
 2. You need to watch out for bombs, don't click on them or you'll lose points.  
 3. Crates and bombs fly up then fall down, so you have to be quick.
 
+### Game Testing and Debugging
+**Has the student thoroughly tested the game for balance, mechanics, and user experience?**
+Yes. I have tested the all aspects of the game, such as interactions with buttons, click events (popping a crate), made sure explosions and sound effects worked as intended, as well as the score and missed score counter work just as required. I've cleared out all bugs encountered from testing.
+
+**Did the student integrate feedback from peers, teachers, or testers into improving the game?**
+I had gotten feedback from testers to make crates jump a little higher because some end up jumping so low that you cannot get them in time. I had sucessfully fixed the problem by increasing the speeds of their launches from minimum 8 --> 10.
+
 ### Flowchart
 ```mermaid
 flowchart TD
