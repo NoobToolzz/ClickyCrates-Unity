@@ -19,12 +19,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI instructionsText;
 
     private int score;
+    private Sensor sensorManager;
     private float spawnRate = 1.0f;
     public int maxMissedTargets; // To pass the number of targets that need to be missed per difficulty
 
+    // Pass play music to true to indicate music must be playing and find the "Sensor" object and gets its component
     private void Awake()
     {
         playMusic = true;
+        sensorManager = GameObject.Find("Sensor").GetComponent<Sensor>();
     }
 
     // Set score to 0, isGameActive to true, start spawning the targets and the updating score function
@@ -33,16 +36,20 @@ public class GameManager : MonoBehaviour
     public void StartGame(int difficulty)
     {
         // Set max missed targets based on selected difficulty
+        // Also change the missed targets initial text to show up
         switch (difficulty)
         {
             case 1: // Easy
                 maxMissedTargets = 3;
+                sensorManager.targetsMissed.text = "Targets Missed: 0 / 3";
                 break;
             case 2: // Medium
                 maxMissedTargets = 5;
+                sensorManager.targetsMissed.text = "Targets Missed: 0 / 5";
                 break;
             case 3: // Hard
                 maxMissedTargets = 7;
+                sensorManager.targetsMissed.text = "Targets Missed: 0 / 7";
                 break;
         }
 
