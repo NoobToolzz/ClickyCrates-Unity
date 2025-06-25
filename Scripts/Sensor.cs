@@ -21,11 +21,17 @@ public class Sensor : MonoBehaviour
         // Check if the object is NOT tagged as "Bad"
         if (!other.CompareTag("Bad"))
         {
-            hitObjectCount++; // Increment the counter for any object hitting the sensor
-            targetsMissed.text = "Targets Missed: " + hitObjectCount + " / 3"; // Update the text to reflect the count
+            if (gameManager.isGameActive) // Only occurs if game is still active
+            {
+                hitObjectCount++; // Increment the counter for any object hitting the sensor
+                targetsMissed.text = "Targets Missed: " + hitObjectCount + " / " + gameManager.maxMissedTargets; // Update text to reflect count
+            }
 
-            // When any object has hit the sensor 3 times, trigger game over
-            if (hitObjectCount >= 3) { gameManager.GameOver(); }
+            // When any object has hit the sensor the maximum number of times, trigger game over
+            if (hitObjectCount >= gameManager.maxMissedTargets)
+            {
+                gameManager.GameOver();
+            }
         }
 
         // Destroy the object that hit the sensor

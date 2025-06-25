@@ -1,12 +1,13 @@
 using System.Runtime.CompilerServices;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Target : MonoBehaviour
 {
     private Rigidbody targetRb;
     private GameManager gameManager; // Referencing GameManager.cs script
-    private float minSpeed = 8;
-    private float maxSpeed = 13;
+    private float minSpeed = 10;
+    private float maxSpeed = 15;
     private float maxTorque = 2;
     private float xRange = 4;
     private float ySpawnPos = -2;

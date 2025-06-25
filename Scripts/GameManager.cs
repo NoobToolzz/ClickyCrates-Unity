@@ -4,10 +4,12 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
     // Variables are all binded to their specific elements within the Unity interface, applies to all scripts for this game
+    public bool playMusic; // This is too pass the music playing status for game started / over (to play and pause the background music)
     public bool isGameActive;
     public Button restartButton;
     public GameObject titlescreen; // Title screen contains the title text and difficulty buttons
@@ -18,12 +20,32 @@ public class GameManager : MonoBehaviour
 
     private int score;
     private float spawnRate = 1.0f;
+    public int maxMissedTargets; // To pass the number of targets that need to be missed per difficulty
+
+    private void Awake()
+    {
+        playMusic = true;
+    }
 
     // Set score to 0, isGameActive to true, start spawning the targets and the updating score function
     // The spawnRate is calculated by dividing the assigned integer with the difficulties of each mode
     // The difficulties for Easy, Medium, and Hard modes are 1, 2, 3 respectively.
     public void StartGame(int difficulty)
     {
+        // Set max missed targets based on selected difficulty
+        switch (difficulty)
+        {
+            case 1: // Easy
+                maxMissedTargets = 3;
+                break;
+            case 2: // Medium
+                maxMissedTargets = 5;
+                break;
+            case 3: // Hard
+                maxMissedTargets = 7;
+                break;
+        }
+
         isGameActive = true; // Flag to indicate the game has begun / is in a "playing" state
         spawnRate /= difficulty; // Difficulty is passed by DifficultyButton.cs
 
@@ -47,24 +69,10 @@ public class GameManager : MonoBehaviour
     // Then sets isGameActive to false to indicate the game is over
     public void GameOver()
     {
-        isGameActive = false;
+        isGameActive = false; playMusic = false;
         gameOverText.gameObject.SetActive(true); restartButton.gameObject.SetActive(true);
 
-        DestroyRemainingObjects(); // Destroys any remaining objects that haven't yet been destroyed
-        Invoke("DestroyRemainingObjects", 0.25f); // Invoke DestroyRemainingObjects() method again after 250ms (0.25 seconds) because there's always one object left
-    }
-    
-    // Loops through all gameObjects, filters them by the ones that contain "Good" and "Bad" in their name, then destroys those ones.
-    private void DestroyRemainingObjects()
-    {
-        // Find all objects in the scene
-        GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-
-        // Loop through all objects and destroy those containing "Good" or "Bad" in their name
-        foreach (GameObject obj in allObjects)
-        {
-            if (obj.name.Contains("Good") || obj.name.Contains("Bad")) { Destroy(obj); } // Destroy it
-        }
+        StartCoroutine(DestroyRemainingObjects()); // Start couroutine to invoke DestroyRemainingObjects() method again after 250ms (0.25 seconds) because there's always one object left
     }
 
     // This gets the current scene and reloads it to the starting state
@@ -84,5 +92,33 @@ public class GameManager : MonoBehaviour
             int index = Random.Range(0, targets.Count);
             Instantiate(targets[index]);
         }
+    }
+
+    // Loops through all gameObjects, filters them by the ones that contain "Good" and "Bad" in their name, then destroys those ones.
+    private IEnumerator DestroyRemainingObjects()
+    {
+        bool objectsRemaining; // True / False
+
+        do
+        {
+            objectsRemaining = false; // Reset the flag for each loop stage
+
+            // Find all objects in the scene
+            GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+
+            // Loop through all objects and destroy those containing "Good" or "Bad" in their name
+            foreach (GameObject obj in allObjects)
+            {
+                if (obj.name.Contains("Good") || obj.name.Contains("Bad"))
+                {
+                    Destroy(obj); // Destroy it
+                    objectsRemaining = true; // Set the flag to true if an object was destroyed
+                }
+            }
+
+            // Yield return null to wait for the next frame
+            yield return null;
+
+        } while (objectsRemaining); // Continue looping until no objects are left
     }
 }
